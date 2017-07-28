@@ -60,8 +60,8 @@ for elem in downloadPageSoup.find_all('a'):
     filename = elem.get_text()
     url = 'https://freddiemac.embs.com/FLoan/Data/' + filename
     year = filename[-8:-4]
-#     if filename.startswith('sample') and int(year) == 2005:
-    if filename.startswith('historical') and int(year) in [1999, 2013, 2016]:
+    if filename.startswith('sample') and int(year) >= 2005 and int(year) <= 2016:
+#     if filename.startswith('historical') and int(year) in [1999, 2013, 2016]:
         filenames.append(filename)
         download_file(url, filename)
 
@@ -341,4 +341,3 @@ orig_summary_state_df.to_csv('orig_summary_state.csv', index=False)
 
 perf_summary_df = pd.DataFrame(perf_summary_list)
 perf_summary_df.to_csv('perf_summary.csv', index=False)
-
