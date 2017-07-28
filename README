@@ -3,9 +3,12 @@
   
 2. Run the image to create a docker container:
   docker run -ti -p 8888:8888 xunpeng715/midterm python /midterm/part1/Crawler_SummaryFiles.py
-  
-3. Get into the container shell
+
+3. Start docker container:
+  docker container start <containerID>
+
+4. Get into the container shell
   docker exec -ti <containerID> /bin/bash
   
-4. Run jupyter notebook
+5. Run jupyter notebook
   ./run_jupyter.sh
