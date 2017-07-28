@@ -5,11 +5,6 @@
 
 from bs4 import BeautifulSoup
 import requests
-import pandas as pd
-import numpy as np
-from collections import OrderedDict
-from random import randint, random
-from numbers import Number
 
 
 # In[2]:
@@ -54,7 +49,7 @@ with requests.session() as s:
     downloadPageSoup = BeautifulSoup(response.text, 'lxml')
 
 
-# In[ ]:
+# In[5]:
 
 filenames = []
 
@@ -63,19 +58,19 @@ for elem in downloadPageSoup.find_all('a'):
     filename = elem.get_text()
     url = 'https://freddiemac.embs.com/FLoan/Data/' + filename
     year = filename[-8:-4]
-    quarter = filename[-9:-4]
-    if filename.startswith('historical') and int(year) == 2005 and int(quarter) in [1, 2]:
+    quarter = filename[-9:-8]
+    if filename.startswith('historical') and int(year) == 2005 and int(quarter) >= 1 and int(quarter) <= 2:
         filenames.append(filename)
         download_file(url, filename)
 
 
-# In[7]:
+# In[6]:
 
 import zipfile
 import os
 
 
-# In[8]:
+# In[7]:
 
 # Unzip file
 for file in filenames:
@@ -90,7 +85,16 @@ for file in filenames:
 
 
 
-# In[10]:
+# In[8]:
+
+import pandas as pd
+import numpy as np
+from collections import OrderedDict
+from random import randint, random
+from numbers import Number
+
+
+# In[9]:
 
 def calMean(df, col):
     std = df[col].std()
@@ -101,7 +105,7 @@ def calMean(df, col):
     return realMean
 
 
-# In[11]:
+# In[10]:
 
 def cleanOrigData(orig_file, clean_file):
     orig_col_headers = ['credit_score', 'first_payment_date', 'first_time_homebuyer_flag', 'maturity_date', 'metropolitan_stat_area', 'mortgage_insurance_perc', 'no_unit', 'occupancy_status', 'orig_combined_loantovalue', 'orig_debttoincome', 'orig_upb', 'orig_loantovalue', 'orig_interest_rate', 'channel', 'prepayment_penalty_mortgage_flag', 'product_type', 'property_state', 'property_type', 'postal_code', 'loan_sequence_no', 'loan_purpose', 'orig_loan_term', 'no_borrower', 'seller_name', 'service_name', 'super_conforming_flag']
@@ -156,7 +160,7 @@ def cleanOrigData(orig_file, clean_file):
     return orig_df
 
 
-# In[12]:
+# In[13]:
 
 def cleanPerfData(perf_file, clean_file):
     perform_col_headers = ['loan_sequence_no', 'monthly_reporting_period', 'curr_actual_upb', 'curr_loan_delinquency_status', 'loan_age', 'remaining_months_to_legal_maturity', 'repurchase_flag', 'modification_flag', 'zero_balance_code', 'zero_balance_effective_date', 'curr_interest_rate', 'curr_deferred_upb', 'due_date_last_paid_installment', 'mi_recoveries', 'net_sales_proceeds', 'non_mi_recoveries', 'expenses', 'legal_costs', 'maintain_preserve_costs', 'tax_insurance', 'miscellaneous_expense', 'actual_loss_calculation', 'modification_cost']
@@ -182,15 +186,14 @@ def cleanPerfData(perf_file, clean_file):
 
 # Clean
 
-# In[ ]:
+# In[15]:
 
-for year in range(2005, 2005):
+for year in range(2005, 2006):
     for quarter in range(1, 3):
-        orig_file = 'historical_data1_Q{0}{1}/historical_data1_Q{0}{1}.txt'.format(quarter, year)
-        orig_clean_file = 'historical_data1_Q{0}{1}/historical_data1_Q{0}{1}_clean.csv'.format(quarter, year)
-        orig_df = cleanOrigData(orig_file, orig_clean_file)
+#        orig_file = 'historical_data1_Q{0}{1}/historical_data1_Q{0}{1}.txt'.format(quarter, year)
+#        orig_clean_file = 'historical_data1_Q{0}{1}/historical_data1_Q{0}{1}_clean.csv'.format(quarter, year)
+#        orig_df = cleanOrigData(orig_file, orig_clean_file)
         
         perf_file = 'historical_data1_Q{0}{1}/historical_data1_time_Q{0}{1}.txt'.format(quarter, year)
         perf_clean_file = 'historical_data1_Q{0}{1}/historical_data1_time_Q{0}{1}_clean.csv'.format(quarter, year)
         perf_df = cleanPerfData(perf_file, perf_clean_file)
-
